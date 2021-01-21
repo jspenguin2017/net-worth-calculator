@@ -71,6 +71,22 @@ class CurrencyModel {
         this.#data = currency;
     }
 
+    getAllCurrencyNames() {
+        // First 10 of https://api.exchangeratesapi.io/latest?base=CAD
+        return [
+            'CAD',
+            'HKD',
+            'ISK',
+            'PHP',
+            'DKK',
+            'HUF',
+            'CZK',
+            'GBP',
+            'RON',
+            'SEK',
+        ];
+    }
+
     getCurrency() {
         return this.#data;
     }
@@ -111,10 +127,12 @@ longTermDebt.addEntry('Mortgage 2', 3500, 632634);
 longTermDebt.addEntry('Mortgage 1', 500, 10000);
 longTermDebt.addEntry('Mortgage 1', 700, 10000);
 
-export default {
+const model = {
     cashAndInvestments,
     longTermAssets,
     shortTermLiabilities,
     longTermDebt,
     currency,
 };
+
+export default model;
