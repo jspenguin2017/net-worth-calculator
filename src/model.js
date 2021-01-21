@@ -13,8 +13,8 @@ class AssetModel {
         return this.#data.get(name);
     }
 
-    serialize() {
-        return JSON.stringify(Array.from(this.#data.entries()));
+    toJSON() {
+        return Array.from(this.#data.entries());
     }
 }
 
@@ -59,16 +59,34 @@ class LiabilityModel {
         return this.#data.get(name).getTotalValue();
     }
 
-    serialize() {
-        return JSON.stringify(Array.from(this.#data.entries()));
+    toJSON() {
+        return Array.from(this.#data.entries());
     }
 }
 
-export const cashAndInvestments = new AssetModel();
-export const longTermAssets = new AssetModel();
+class CurrencyModel {
+    #data = 'CAD';
 
-export const shortTermLiabilities = new LiabilityModel();
-export const longTermDebt = new LiabilityModel();
+    changeCurrency(currency) {
+        this.#data = currency;
+    }
+
+    getCurrency() {
+        return this.#data;
+    }
+
+    toJSON() {
+        return this.getCurrency();
+    }
+}
+
+const cashAndInvestments = new AssetModel();
+const longTermAssets = new AssetModel();
+
+const shortTermLiabilities = new LiabilityModel();
+const longTermDebt = new LiabilityModel();
+
+const currency = new CurrencyModel();
 
 // Pre-populated data
 cashAndInvestments.addEntry('Checking', 2000);
@@ -92,3 +110,11 @@ longTermDebt.addEntry('Mortgage 1', 2000, 250999);
 longTermDebt.addEntry('Mortgage 2', 3500, 632634);
 longTermDebt.addEntry('Mortgage 1', 500, 10000);
 longTermDebt.addEntry('Mortgage 1', 700, 10000);
+
+export default {
+    cashAndInvestments,
+    longTermAssets,
+    shortTermLiabilities,
+    longTermDebt,
+    currency,
+};

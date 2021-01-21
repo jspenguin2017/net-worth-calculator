@@ -1,8 +1,23 @@
+p {
+  font-weight: bold;
+  margin: 0;
+}
+
 .App {
   max-width: 800px;
   margin: auto;
 }
 
-p {
-  font-weight: bold;
+.header {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+.selectCurrencyWrapper {
+  text-align: right;
+
+}
+
+.selectCurrencyWrapper p {
+  color: gray;
 }

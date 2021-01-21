@@ -1,15 +1,15 @@
 import './App.css';
-import {cashAndInvestments, longTermAssets, shortTermLiabilities, longTermDebt} from './model.js';
+import model from './model.js';
 
 function App() {
-  console.log(cashAndInvestments.serialize());
-  console.log(longTermDebt.serialize());
-
   return (
     <div className="App">
       <header className="App-header">
-        <p>Tracking your Networth</p>
+        <p className="header">Tracking your Networth</p>
       </header>
+      <div className="selectCurrencyWrapper">
+        <p>Select Currency: <select>CAD</select></p>
+      </div>
 
       <hr></hr>
     </div>
