@@ -21,6 +21,13 @@ class Component extends React.Component {
         model.longTermDebt.fromJSON(jsonData.longTermDebt);
     }
 
+    renderInputs() {
+        model.cashAndInvestments.render();
+        model.longTermAssets.render();
+        model.shortTermLiabilities.render();
+        model.longTermDebt.render();
+    }
+
     recalculate() {
         this.setState({ busy: true });
         fetch(`${API_URL}set`, {
@@ -55,7 +62,9 @@ class Component extends React.Component {
         let value = event.target.value;
         value = value.replace(/[^0-9.]/g, '');
         value = Number.parseFloat(value);
+
         model.setTotalValue(name, value);
+        this.recalculate();
     }
 
     componentDidMount() {
@@ -77,10 +86,7 @@ class Component extends React.Component {
     }
 
     componentDidUpdate() {
-        model.cashAndInvestments.render();
-        model.longTermAssets.render();
-        model.shortTermLiabilities.render();
-        model.longTermDebt.render();
+        this.renderInputs();
     }
 
     getTable(model, name) {
@@ -92,7 +98,7 @@ class Component extends React.Component {
                     <td className="align-right input">
                         <input className="input"
                             ref={model.getRef(name)}
-                            onChange={this.handleValueChange.bind(this, model, name)}></input>
+                            onBlur={this.handleValueChange.bind(this, model, name)}></input>
                     </td>
                 </tr>
             );
@@ -121,7 +127,9 @@ class Component extends React.Component {
                 <div className="align-right">
                     <span className="bold gray">
                         Select Output Currency (Inputs Are Always in CAD):&nbsp;
-            <select className="bold input" value={model.currency.getCurrency()} onChange={this.handleCurrencyChange.bind(this)}>
+                        <select className="bold input"
+                            value={model.currency.getCurrency()}
+                            onChange={this.handleCurrencyChange.bind(this)}>
                             {
                                 model.currency.getAllCurrencyNames().map(currency =>
                                     <option value={currency} key={currency}>{currency}</option>)

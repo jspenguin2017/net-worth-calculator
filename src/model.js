@@ -30,8 +30,10 @@ class Model {
     _data = new Map();
 
     _render() {
-        for (const [_, entry] of this._data.entries())
+        for (const [_, entry] of this._data.entries()) {
             entry.getRef().current.value = entry.getTotalValue();
+            void _; // Suppress unused warning
+        }
     }
 
     getNames() {
