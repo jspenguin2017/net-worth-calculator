@@ -91,6 +91,14 @@ table input:focus {
   width: 80%;
 }
 
+.width60 {
+  width: 60%;
+}
+
 .width20 {
   width: 20%;
+}
+
+.pad-right {
+  padding-right: 5px;
 }

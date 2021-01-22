@@ -100,9 +100,12 @@ class Component extends React.Component {
                     <td>{name}</td>
                     {
                         showMonthlyPayment ? (
-                            <td>
+                            <td className="align-right pad-right">
                                 {
-                                    formatCurrency(model.currency.getCurrency(), currentModel.getMonthlyPayment(name) * this.state.exchangeRate)
+                                    formatCurrency(
+                                        model.currency.getCurrency(),
+                                        currentModel.getMonthlyPayment(name) * this.state.exchangeRate,
+                                    )
                                 }
                             </td>
                         ) : null
@@ -146,8 +149,8 @@ class Component extends React.Component {
                             value={model.currency.getCurrency()}
                             onChange={this.handleCurrencyChange.bind(this)}>
                             {
-                                model.currency.getAllCurrencyNames().map(currency =>
-                                    <option value={currency} key={currency}>{currency}</option>)
+                                model.currency.getAllCurrencyNames()
+                                    .map(currency => <option value={currency} key={currency}>{currency}</option>)
                             }
                         </select>
                     </span>
@@ -156,10 +159,15 @@ class Component extends React.Component {
 
                 <div>
                     <div>
-                        <span className="bold output float-left">Net Worth</span>
+                        <span className="bold output float-left">
+                            Net Worth
+                        </span>
                         <span className="bold output float-right">
                             {
-                                formatCurrency(model.currency.getCurrency(), this.state.netWorth)
+                                formatCurrency(
+                                    model.currency.getCurrency(),
+                                    this.state.netWorth,
+                                )
                             }
                         </span>
                         <span className="clear"></span>
@@ -178,21 +186,32 @@ class Component extends React.Component {
 
                 <div>
                     {
-                        this.getTable(model.cashAndInvestments, "Cash and Investments")
+                        this.getTable(
+                            model.cashAndInvestments,
+                            "Cash and Investments",
+                        )
                     }
                 </div>
                 <div>
                     {
-                        this.getTable(model.longTermAssets, "Long Term Assets")
+                        this.getTable(
+                            model.longTermAssets,
+                            "Long Term Assets",
+                        )
                     }
                 </div>
 
                 <div>
                     <div>
-                        <span className="bold output float-left">Total Assets</span>
+                        <span className="bold output float-left">
+                            Total Assets
+                        </span>
                         <span className="bold output float-right">
                             {
-                                formatCurrency(model.currency.getCurrency(), this.state.totalAssets)
+                                formatCurrency(
+                                    model.currency.getCurrency(),
+                                    this.state.totalAssets,
+                                )
                             }
                         </span>
                         <span className="clear"></span>
@@ -212,21 +231,34 @@ class Component extends React.Component {
 
                 <div>
                     {
-                        this.getTable(model.shortTermLiabilities, "Short Term Liabilities", true)
+                        this.getTable(
+                            model.shortTermLiabilities,
+                            "Short Term Liabilities",
+                            true,
+                        )
                     }
                 </div>
                 <div>
                     {
-                        this.getTable(model.longTermDebt, "Long Term Debt", true)
+                        this.getTable(
+                            model.longTermDebt,
+                            "Long Term Debt",
+                            true,
+                        )
                     }
                 </div>
 
                 <div>
                     <div>
-                        <span className="bold output float-left">Total Liabilities</span>
+                        <span className="bold output float-left">
+                            Total Liabilities
+                        </span>
                         <span className="bold output float-right">
                             {
-                                formatCurrency(model.currency.getCurrency(), this.state.totalLiabilities)
+                                formatCurrency(
+                                    model.currency.getCurrency(),
+                                    this.state.totalLiabilities,
+                                )
                             }
                         </span>
                         <span className="clear"></span>
