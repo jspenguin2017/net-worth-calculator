@@ -1,23 +1,61 @@
-p {
-  font-weight: bold;
-  margin: 0;
-}
-
 .App {
-  max-width: 800px;
   margin: auto;
-}
-
-.header {
+  max-width: 800px;
   padding-top: 1em;
-  padding-bottom: 1em;
 }
 
-.selectCurrencyWrapper {
+/* Float */
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+.clear {
+  clear: both;
+}
+
+/* Text */
+.align-right {
   text-align: right;
-
 }
 
-.selectCurrencyWrapper p {
+.bold {
+  font-weight: bold;
+}
+
+.input {
+  color: darkred;
+}
+
+.output {
+  color: darkgreen;
+}
+
+.gray {
   color: gray;
+}
+
+/* Table */
+input {
+  border: 0;
+  width: 85%;
+}
+
+table, tr {
+  width: 100%;
+}
+
+th {
+  text-align: left;
+}
+
+.width80 {
+  width: 80%;
+}
+
+.width20 {
+  width: 20%;
 }
