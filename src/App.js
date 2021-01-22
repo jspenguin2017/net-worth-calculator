@@ -126,7 +126,7 @@ class Component extends React.Component {
             <div>
                 <div className="align-right">
                     <span className="bold gray">
-                        Select Output Currency (Inputs Are Always in CAD):&nbsp;
+                        Select Currency:&nbsp;
                         <select className="bold input"
                             value={model.currency.getCurrency()}
                             onChange={this.handleCurrencyChange.bind(this)}>
