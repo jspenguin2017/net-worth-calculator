@@ -27,21 +27,29 @@
 }
 
 .input {
-  color: darkred;
+  color: #db0000;
 }
 
 .output {
-  color: darkgreen;
+  color: green;
 }
 
 .gray {
   color: gray;
 }
 
-/* Table */
-input {
+/* Select */
+select {
   border: 0;
-  width: 85%;
+}
+
+select:focus {
+  outline: 0;
+}
+
+/* Table */
+table {
+  border-spacing: 0;
 }
 
 table, tr {
@@ -50,6 +58,33 @@ table, tr {
 
 th {
   text-align: left;
+}
+
+th, td {
+  padding: 5px 0 5px 0;
+}
+
+td {
+  border-bottom: 1px solid gray;
+}
+
+td:first-child {
+  border-right: 1px solid gray;
+}
+
+table input {
+  border: 0;
+  text-align: right;
+  width: 85%;
+}
+
+table input:focus {
+  background-color: #ffebeb;
+  outline: 0;
+}
+
+.border2 {
+  border-bottom: 2px solid gray;
 }
 
 .width80 {
