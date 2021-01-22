@@ -9,8 +9,18 @@ class AssetModel {
         return this.#data.keys();
     }
 
+    setTotalValue(name, totalValue) {
+        this.#data.set(name, totalValue);
+    }
+
     getTotalValue(name) {
         return this.#data.get(name);
+    }
+
+    fromJSON(jsonData) {
+        for (const [name, totalValue] of jsonData) {
+            this.#data.set(name, totalValue);
+        }
     }
 
     toJSON() {
@@ -29,6 +39,10 @@ class LiabilityEntry {
 
     getMonthlyPayment() {
         return this.#monthlyPayment;
+    }
+
+    setTotalValue(totalValue) {
+        this.#totalValue = totalValue;
     }
 
     getTotalValue() {
@@ -59,6 +73,11 @@ class LiabilityModel {
         return this.#data.get(name).getTotalValue();
     }
 
+    fromJSON(jsonData) {
+        for (const [name, totalValue] of jsonData)
+            this.#data.get(name).setTotalValue(totalValue);
+    }
+
     toJSON() {
         return Array.from(this.#data.entries());
     }
@@ -72,7 +91,7 @@ class CurrencyModel {
     }
 
     getAllCurrencyNames() {
-        // First 10 of https://api.exchangeratesapi.io/latest?base=CAD
+        // First 10 of https://api.exchangeratesapi.io/latest
         return [
             'CAD',
             'HKD',
@@ -124,8 +143,8 @@ shortTermLiabilities.addEntry('Credit Card 2', 150, 322);
 
 longTermDebt.addEntry('Mortgage 1', 2000, 250999);
 longTermDebt.addEntry('Mortgage 2', 3500, 632634);
-longTermDebt.addEntry('Mortgage 1', 500, 10000);
-longTermDebt.addEntry('Mortgage 1', 700, 10000);
+longTermDebt.addEntry('Line of Credit', 500, 10000);
+longTermDebt.addEntry('Investment Loan', 700, 10000);
 
 const model = {
     cashAndInvestments,

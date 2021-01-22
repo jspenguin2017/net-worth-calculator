@@ -2,37 +2,78 @@ import './App.css';
 import React from 'react';
 import model from './model.js';
 
+const API_URL = 'http://localhost:3001/api/';
+
 class Component extends React.Component {
   state = {
     netWorth: 1212130,
     totalAssets: 2120427,
     totalLiabilities: 908297,
+    busy: true,
   };
 
-  defaultFormatter = new Intl.NumberFormat('en', { style: 'currency', currency: 'USD' });
+  formatCurrency(value) {
+    let currency = model.currency.getCurrency();
 
-  formatCurrency(value, currency) {
     // Show '$' instead of 'CA$'
     if (currency === 'CAD')
       currency = 'USD'
 
-    const formatter = currency ? new Intl.NumberFormat('en', {style: 'currency', currency}) : this.defaultFormatter;
-
+    const formatter = new Intl.NumberFormat('en', {style: 'currency', currency});
     return formatter.format(value);
   }
 
-  formatCurrencyNoSign(value) {
-    return this.formatCurrency(value).replace('$', '');
+  restoreModel(jsonData) {
+    model.cashAndInvestments.fromJSON(jsonData.cashAndInvestments);
+    model.longTermAssets.fromJSON(jsonData.longTermAssets);
+    model.shortTermLiabilities.fromJSON(jsonData.shortTermLiabilities);
+    model.longTermDebt.fromJSON(jsonData.longTermDebt);
+    model.currency.changeCurrency(jsonData.currency);
   }
 
   recalculate() {
-    // TODO
-    this.forceUpdate();
+    this.setState({ busy: true });
+    fetch(`${API_URL}set`, {
+      method: 'POST',
+      body: JSON.stringify(model),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(r => r.json())
+    .then((jsonData) => {
+      this.restoreModel(jsonData.model);
+      this.setState(Object.assign(jsonData.data, { busy: false }));
+    })
+    .catch((err) => {
+      console.error(err);
+    });
   }
 
   handleCurrencyChange(event) {
+    if (this.state.busy)
+      return;
+
     model.currency.changeCurrency(event.target.value);
     this.recalculate();
+  }
+
+  componentDidMount() {
+    fetch(`${API_URL}get`, {
+      method: 'POST',
+      body: JSON.stringify(model),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(r => r.json())
+    .then(this.restoreModel)
+    .then(() => {
+      this.recalculate();
+    })
+    .catch((err) => {
+      console.error(err);
+    });
   }
 
   getTable(model, name) {
@@ -42,7 +83,7 @@ class Component extends React.Component {
         <tr>
           <td>{name}</td>
           <td className="align-right input">
-            $<input className="input" value={this.formatCurrencyNoSign(model.getTotalValue(name))}></input>
+            <input className="input" value={this.formatCurrency(model.getTotalValue(name))}></input>
           </td>
         </tr>
       );
@@ -71,7 +112,7 @@ class Component extends React.Component {
         <div className="align-right">
           <span className="bold gray">
             Select Output Currency (Inputs Are Always in CAD):&nbsp;
-            <select className="bold input" onChange={this.handleCurrencyChange.bind(this)}>
+            <select className="bold input" value={model.currency.getCurrency()} onChange={this.handleCurrencyChange.bind(this)}>
               {
                 model.currency.getAllCurrencyNames().map(currency =>
                   <option value={currency} key={currency}>{currency}</option>)
@@ -86,7 +127,7 @@ class Component extends React.Component {
             <span className="bold output float-left">Net Worth</span>
             <span className="bold output float-right">
               {
-                this.formatCurrency(this.state.netWorth, model.currency.getCurrency())
+                this.formatCurrency(this.state.netWorth)
               }
             </span>
             <span className="clear"></span>
@@ -119,7 +160,7 @@ class Component extends React.Component {
             <span className="bold output float-left">Total Assets</span>
             <span className="bold output float-right">
               {
-                this.formatCurrency(this.state.totalAssets, model.currency.getCurrency())
+                this.formatCurrency(this.state.totalAssets)
               }
             </span>
             <span className="clear"></span>
@@ -153,7 +194,7 @@ class Component extends React.Component {
             <span className="bold output float-left">Total Liabilities</span>
             <span className="bold output float-right">
               {
-                this.formatCurrency(this.state.totalLiabilities, model.currency.getCurrency())
+                this.formatCurrency(this.state.totalLiabilities)
               }
             </span>
             <span className="clear"></span>
