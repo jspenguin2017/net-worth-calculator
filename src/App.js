@@ -3,7 +3,7 @@ import React from 'react';
 import model from './model';
 import { formatCurrency } from './utils';
 
-const API_URL = 'http://localhost:3001/api/';
+const API_URL = 'http://localhost:3001/api';
 
 class Component extends React.Component {
     state = {
@@ -30,7 +30,7 @@ class Component extends React.Component {
 
     recalculate() {
         this.setState({ busy: true });
-        fetch(`${API_URL}set`, {
+        fetch(`${API_URL}/set`, {
             method: 'POST',
             body: JSON.stringify(model),
             headers: {
@@ -43,6 +43,7 @@ class Component extends React.Component {
                 this.setState(Object.assign(jsonData.data, { busy: false }));
             })
             .catch((err) => {
+                alert('Failed to call /set, check the console.');
                 console.error(err);
             });
     }
@@ -68,7 +69,7 @@ class Component extends React.Component {
     }
 
     componentDidMount() {
-        fetch(`${API_URL}get`, {
+        fetch(`${API_URL}/get`, {
             method: 'POST',
             body: JSON.stringify(model),
             headers: {
@@ -81,6 +82,7 @@ class Component extends React.Component {
                 this.recalculate();
             })
             .catch((err) => {
+                alert('Failed to call /get, check the console.');
                 console.error(err);
             });
     }
