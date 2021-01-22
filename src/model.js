@@ -1,52 +1,24 @@
-class AssetModel {
-    #data = new Map();
+import React from 'react';
+import { formatCurrency } from './utils';
 
-    addEntry(name, totalValue) {
-        this.#data.set(name, totalValue);
-    }
+class Entry {
+    _totalValue = 0;
+    _inputRef = React.createRef();
 
-    getNames() {
-        return this.#data.keys();
-    }
-
-    setTotalValue(name, totalValue) {
-        this.#data.set(name, totalValue);
-    }
-
-    getTotalValue(name) {
-        return this.#data.get(name);
-    }
-
-    fromJSON(jsonData) {
-        for (const [name, totalValue] of jsonData) {
-            this.#data.set(name, totalValue);
-        }
-    }
-
-    toJSON() {
-        return Array.from(this.#data.entries());
-    }
-}
-
-class LiabilityEntry {
-    #monthlyPayment = 0;
-    #totalValue = 0;
-
-    constructor(monthlyPayment, totalValue) {
-        this.#monthlyPayment = monthlyPayment;
-        this.#totalValue = totalValue;
-    }
-
-    getMonthlyPayment() {
-        return this.#monthlyPayment;
+    constructor(totalValue) {
+        this._totalValue = totalValue;
     }
 
     setTotalValue(totalValue) {
-        this.#totalValue = totalValue;
+        this._totalValue = totalValue;
     }
 
     getTotalValue() {
-        return this.#totalValue;
+        return this._totalValue;
+    }
+
+    getRef() {
+        return this._inputRef;
     }
 
     toJSON() {
@@ -54,41 +26,89 @@ class LiabilityEntry {
     }
 }
 
-class LiabilityModel {
-    #data = new Map();
+class Model {
+    _data = new Map();
 
-    addEntry(name, monthlyPayment, totalValue) {
-        this.#data.set(name, new LiabilityEntry(monthlyPayment, totalValue));
+    _render() {
+        for (const [_, entry] of this._data.entries())
+            entry.getRef().current.value = entry.getTotalValue();
     }
 
     getNames() {
-        return this.#data.keys();
+        return this._data.keys();
     }
 
-    getMonthlyPayment(name) {
-        return this.#data.get(name).getMonthlyPayment();
+    setTotalValue(name, totalValue) {
+        this._data.get(name).setTotalValue(totalValue);
     }
 
     getTotalValue(name) {
-        return this.#data.get(name).getTotalValue();
+        return this._data.get(name).getTotalValue();
+    }
+
+    getRef(name) {
+        return this._data.get(name).getRef();
     }
 
     fromJSON(jsonData) {
         for (const [name, totalValue] of jsonData)
-            this.#data.get(name).setTotalValue(totalValue);
+            this._data.get(name).setTotalValue(totalValue);
     }
 
     toJSON() {
-        return Array.from(this.#data.entries());
+        return Array.from(this._data.entries());
+    }
+
+    _renderOne(name) {
+        this._data.get(name).getRef().current.value = formatCurrency(
+            model.currency.getCurrency(),
+            this._data.get(name).getTotalValue(),
+        );
+    }
+
+    render(name) {
+        if (name) {
+            this._renderOne(name)
+        } else {
+            for (const name of this._data.keys())
+                this._renderOne(name);
+        }
+    }
+}
+
+class AssetEntry extends Entry { };
+
+class AssetModel extends Model {
+    addEntry(name, totalValue) {
+        this._data.set(name, new AssetEntry(totalValue));
+    }
+}
+
+class LiabilityEntry extends Entry {
+    _monthlyPayment = 0;
+
+    constructor(monthlyPayment, totalValue) {
+        super(totalValue);
+        this._monthlyPayment = monthlyPayment;
+    }
+
+    getMonthlyPayment() {
+        return this._monthlyPayment;
+    }
+}
+
+class LiabilityModel extends Model {
+    addEntry(name, monthlyPayment, totalValue) {
+        this._data.set(name, new LiabilityEntry(monthlyPayment, totalValue));
+    }
+
+    getMonthlyPayment(name) {
+        return this._data.get(name).getMonthlyPayment();
     }
 }
 
 class CurrencyModel {
-    #data = 'CAD';
-
-    changeCurrency(currency) {
-        this.#data = currency;
-    }
+    _data = 'CAD';
 
     getAllCurrencyNames() {
         // First 10 of https://api.exchangeratesapi.io/latest
@@ -106,8 +126,12 @@ class CurrencyModel {
         ];
     }
 
+    setCurrency(currency) {
+        this._data = currency;
+    }
+
     getCurrency() {
-        return this.#data;
+        return this._data;
     }
 
     toJSON() {
