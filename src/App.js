@@ -10,6 +10,7 @@ class Component extends React.Component {
         netWorth: 1212130,
         totalAssets: 2120427,
         totalLiabilities: 908297,
+        exchangeRate: 1,
         busy: true,
     };
 
@@ -91,16 +92,25 @@ class Component extends React.Component {
         this.renderInputs();
     }
 
-    getTable(model, name) {
+    getTable(currentModel, name, showMonthlyPayment = false) {
         let rows = [];
-        for (const name of model.getNames()) {
+        for (const name of currentModel.getNames()) {
             rows.push(
                 <tr key={name}>
                     <td>{name}</td>
+                    {
+                        showMonthlyPayment ? (
+                            <td>
+                                {
+                                    formatCurrency(model.currency.getCurrency(), currentModel.getMonthlyPayment(name) * this.state.exchangeRate)
+                                }
+                            </td>
+                        ) : null
+                    }
                     <td className="align-right input">
                         <input className="input"
-                            ref={model.getRef(name)}
-                            onBlur={this.handleValueChange.bind(this, model, name)}></input>
+                            ref={currentModel.getRef(name)}
+                            onBlur={this.handleValueChange.bind(this, currentModel, name)}></input>
                     </td>
                 </tr>
             );
@@ -110,7 +120,10 @@ class Component extends React.Component {
             <table className="gray">
                 <thead>
                     <tr>
-                        <th className="width80 border2">{name}</th>
+                        <th className={showMonthlyPayment ? "width60 border2" : "width80 border2"}>{name}</th>
+                        {
+                            showMonthlyPayment ? <th className="width20 border2">Monthly Payment</th> : null
+                        }
                         <th className="width20 border2"></th>
                     </tr>
                 </thead>
@@ -125,7 +138,7 @@ class Component extends React.Component {
 
     render() {
         return (
-            <div>
+            <>
                 <div className="align-right">
                     <span className="bold gray">
                         Select Currency:&nbsp;
@@ -199,12 +212,12 @@ class Component extends React.Component {
 
                 <div>
                     {
-                        this.getTable(model.shortTermLiabilities, "Short Term Liabilities")
+                        this.getTable(model.shortTermLiabilities, "Short Term Liabilities", true)
                     }
                 </div>
                 <div>
                     {
-                        this.getTable(model.longTermDebt, "Long Term Debt")
+                        this.getTable(model.longTermDebt, "Long Term Debt", true)
                     }
                 </div>
 
@@ -224,7 +237,7 @@ class Component extends React.Component {
 
                 <br></br>
                 <br></br>
-            </div>
+            </>
         );
     }
 }

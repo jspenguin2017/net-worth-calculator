@@ -68,8 +68,8 @@ td {
   border-bottom: 1px solid gray;
 }
 
-td:first-child {
-  border-right: 1px solid gray;
+td:last-child {
+  border-left: 1px solid gray;
 }
 
 table input {

@@ -29,23 +29,12 @@ class Entry {
 class Model {
     _data = new Map();
 
-    _render() {
-        for (const [_, entry] of this._data.entries()) {
-            entry.getRef().current.value = entry.getTotalValue();
-            void _; // Suppress unused warning
-        }
-    }
-
     getNames() {
         return this._data.keys();
     }
 
     setTotalValue(name, totalValue) {
         this._data.get(name).setTotalValue(totalValue);
-    }
-
-    getTotalValue(name) {
-        return this._data.get(name).getTotalValue();
     }
 
     getRef(name) {
@@ -61,19 +50,12 @@ class Model {
         return Array.from(this._data.entries());
     }
 
-    _renderOne(name) {
-        this._data.get(name).getRef().current.value = formatCurrency(
-            model.currency.getCurrency(),
-            this._data.get(name).getTotalValue(),
-        );
-    }
-
-    render(name) {
-        if (name) {
-            this._renderOne(name)
-        } else {
-            for (const name of this._data.keys())
-                this._renderOne(name);
+    render() {
+        for (const name of this._data.keys()) {
+            this._data.get(name).getRef().current.value = formatCurrency(
+                model.currency.getCurrency(),
+                this._data.get(name).getTotalValue(),
+            );
         }
     }
 }
