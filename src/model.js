@@ -52,7 +52,7 @@ class Model {
 
     refreshInputs() {
         for (const name of this._data.keys()) {
-            this._data.get(name).getInputRef().current.value = formatCurrency(
+            this.getInputRef(name).current.value = formatCurrency(
                 model.currency.getCurrency(),
                 this._data.get(name).getTotalValue(),
             );
