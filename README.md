@@ -4,7 +4,7 @@ Run `npm install` to install dependencies.
 
 Run `npm start` to start.
 
-Run `npm test -- --coverage --watchAll` to run tests.
+Run `npm run coverage` to run tests.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
