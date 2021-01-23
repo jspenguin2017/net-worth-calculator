@@ -5,7 +5,7 @@ import { formatCurrency } from './utils';
 
 const API_URL = 'http://localhost:3001/api';
 
-class Component extends React.Component {
+class AppComponent extends React.Component {
     state = {
         netWorth: 1212130,
         totalAssets: 2120427,
@@ -279,7 +279,7 @@ function App() {
         <div className="App">
             <span className="bold">Tracking Your Net Worth</span>
             <br></br>
-            <Component></Component>
+            <AppComponent></AppComponent>
         </div>
     );
 }
