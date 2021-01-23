@@ -22,11 +22,11 @@ class Component extends React.Component {
         model.longTermDebt.fromJSON(jsonData.longTermDebt);
     }
 
-    renderInputs() {
-        model.cashAndInvestments.render();
-        model.longTermAssets.render();
-        model.shortTermLiabilities.render();
-        model.longTermDebt.render();
+    refreshInputs() {
+        model.cashAndInvestments.refreshInputs();
+        model.longTermAssets.refreshInputs();
+        model.shortTermLiabilities.refreshInputs();
+        model.longTermDebt.refreshInputs();
     }
 
     recalculate() {
@@ -89,7 +89,7 @@ class Component extends React.Component {
     }
 
     componentDidUpdate() {
-        this.renderInputs();
+        this.refreshInputs();
     }
 
     getTable(currentModel, name, showMonthlyPayment = false) {
@@ -112,7 +112,7 @@ class Component extends React.Component {
                     }
                     <td className="align-right input">
                         <input className="input"
-                            ref={currentModel.getRef(name)}
+                            ref={currentModel.getInputRef(name)}
                             onBlur={this.handleValueChange.bind(this, currentModel, name)}></input>
                     </td>
                 </tr>

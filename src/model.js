@@ -17,7 +17,7 @@ class Entry {
         return this._totalValue;
     }
 
-    getRef() {
+    getInputRef() {
         return this._inputRef;
     }
 
@@ -37,8 +37,8 @@ class Model {
         this._data.get(name).setTotalValue(totalValue);
     }
 
-    getRef(name) {
-        return this._data.get(name).getRef();
+    getInputRef(name) {
+        return this._data.get(name).getInputRef();
     }
 
     fromJSON(jsonData) {
@@ -50,9 +50,9 @@ class Model {
         return Array.from(this._data.entries());
     }
 
-    render() {
+    refreshInputs() {
         for (const name of this._data.keys()) {
-            this._data.get(name).getRef().current.value = formatCurrency(
+            this._data.get(name).getInputRef().current.value = formatCurrency(
                 model.currency.getCurrency(),
                 this._data.get(name).getTotalValue(),
             );
